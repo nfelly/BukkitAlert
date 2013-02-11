@@ -1,4 +1,8 @@
 {
+   "manifest_version": 2,
+   "web_accessible_resources": [
+    "48.png"
+  ],
    "browser_action": {
       "default_icon": "icon.png",
       "default_title": "Go to Alerts"
@@ -11,12 +15,13 @@
    },
 
    "name": "BukkitAlert",
+   "options_page": "options.html",
    "permissions": [ 
       "tabs", 
-      "http://bukkit.org/*",
+      "http://*/",
       "notifications"
    ],
  "background": {
     "scripts": ["background.js"]
-  },   "version": "0.3"
+  },   "version": "1.0"
 }

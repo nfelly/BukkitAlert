@@ -1,0 +1,55 @@
+<html>
+<head>
+<link href="./bootstrap.css" rel="stylesheet">
+
+<title>BukkitAlert Options</title></head>
+
+<body>
+	<div class="container" id="content">
+<h2>BukkitAlert Options:</h2> <br>
+<div class="hero-unit">
+<div class="row-fluid">
+  <div class="span4">
+  	Check frequency:<br>
+<select id="time" multiple="multiple">
+
+ <option value="10000">10 seconds</option>
+ <option value="30000">30 seconds</option>
+ <option value="60000">1 minute</option>
+ <option value="300000">5 minutes</option>
+ <option value="600000">10 minutes</option>
+</select>
+</div>
+  <div class="span4">
+  	Hide notification after:
+<br>
+<select id="autoclose" multiple="multiple">
+
+ <option value="10000">10 seconds</option>
+ <option value="30000">30 seconds</option>
+ <option value="60000">1 minute</option>
+ <option value="300000">5 minutes</option>
+ <option value="600000">10 minutes</option>
+</select>
+</div>
+ <div class="span3">
+  	Sounds:
+  	<br>
+  <div class="well well-small">
+   <label class="checkbox">
+      Notification Sound<input type="checkbox" id="sound"> 
+   </label>
+</div>
+</div>
+</div>
+<div id="status">
+</div>
+<button id="save" type="button" class="btn">Save</button>
+</div>
+</div>
+
+</body>
+
+<script src="options.js"></script>
+
+</html>
