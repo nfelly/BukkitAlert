@@ -8,6 +8,9 @@ function save_options() {
   var select_auto = document.getElementById("autoclose");
   var autoclose = select_auto.children[select_auto.selectedIndex].value;
   localStorage["auto_close"] = autoclose;
+  //dbo api key
+  var select_dbo_key = document.getElementById("dbo_key");
+  localStorage["dbo_key"] = select_dbo_key.value;
   
   var select_sounds = document.getElementById("sound");
   var sounds = select_sounds.checked;
@@ -25,6 +28,10 @@ function save_options() {
 
 // Restores select box state to saved value from localStorage.
 function restore_options() {
+  //dbo api key
+  var dbo_api_key = localStorage["dbo_key"];
+  document.getElementById("dbo_key").value = dbo_api_key;
+
   //fetch time
   var default_time = localStorage["time_length"];
   if (!default_time) {

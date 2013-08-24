@@ -1,27 +1,23 @@
 {
-   "manifest_version": 2,
-   "web_accessible_resources": [
-    "48.png"
-  ],
+   "background": {
+      "scripts": [ "js/background.js" ]
+   },
    "browser_action": {
-      "default_icon": "icon.png",
+      "default_icon": "img/icon.png",
       "default_title": "Go to Alerts"
    },
    "description": "Get Bukkit Alerts",
    "icons": {
-      "128": "128.png",
-      "16": "16.png",
-      "48": "48.png"
+      "128": "img/128.png",
+      "16": "img/16.png",
+      "48": "img/48.png"
    },
-
+   "key": "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCxhgH/x/P0mEGDZVii8ejSzXsNvB1yvcT8gjtWVd97kC+Ghw0Q7Wt2SgCqizvslskDpu4b6peOnS8L1mru2A8ffjTtueVlw/ALj0ILIVEVOJbZYuYskabogXINv72AQoshRIjIF5SM+seB0BsEYCdVEpyD1eoL79FnAP1OLK1MGQIDAQAB",
+   "manifest_version": 2,
    "name": "BukkitAlert",
    "options_page": "options.html",
-   "permissions": [ 
-      "tabs", 
-      "http://*/",
-      "notifications"
-   ],
- "background": {
-    "scripts": ["background.js"]
-  },   "version": "1.0"
+   "permissions": [ "tabs", "http://*/", "notifications" ],
+   "update_url": "https://clients2.google.com/service/update2/crx",
+   "version": "1.1",
+   "web_accessible_resources": [ "img/48.png" ]
 }
