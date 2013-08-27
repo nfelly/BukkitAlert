@@ -54,7 +54,7 @@ function getAlerts() {
     
     total = parseInt(alerts) + parseInt(conversations) + pms;
 
-    if(total != old_total) {
+    if(total != total_old) {
         chrome.browserAction.setBadgeText({text: '' + total});
         chrome.browserAction.setBadgeBackgroundColor({color: "#FF0000"});
     
