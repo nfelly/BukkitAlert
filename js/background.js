@@ -2,27 +2,19 @@ var url = "http://bukkit.org/";
 var dbo_url = "http://dev.bukkit.org/home/";
 
 chrome.browserAction.onClicked.addListener(function(tab) {
-    chrome.tabs.create({'url': url + "account/alerts"}, function(tab) {
-    });
+    chrome.tabs.create({'url': current_url}, function(tab) {});
     chrome.browserAction.setBadgeText({text: ''});
 })
 
-var xhr;
-
-var unread = 0;
-var display_alert = 0;
-
-var con_unread = 0;
-var display_con = 0;
-
-var dbo_unread = 0;
-var display_dbo = 0;
+var conversations_old = 0;
+var alerts_old = 0;
+var pms_old = 0;
+var total_old = 0;
 
 //default localStorage
 localStorage["time_length"] = 30000;
 localStorage["sound_play"] = "true";
 localStorage["auto_close"] = 60000;
-//localStorage["dbo_key"] = "";
 
 getAlerts();
 
@@ -31,11 +23,16 @@ function getYQLAddress(apikey) {
 }
 
 function getAlerts() {
-    xhr = new XMLHttpRequest();
+    var conversations = 0;
+    var alerts = 0;
+    var pms = 0;
+    var total = 0;
+
+    var xhr = new XMLHttpRequest();
     xhr.open( 'GET', url + '.json', true );
     xhr.onload = function () {
-        unread = window.JSON.parse( xhr.responseText )._visitor_alertsUnread;
-        con_unread = window.JSON.parse( xhr.responseText )._visitor_conversationsUnread;
+        alerts = window.JSON.parse( xhr.responseText )._visitor_alertsUnread;
+        conversations = window.JSON.parse( xhr.responseText )._visitor_conversationsUnread;
     };
     xhr.onerror = function () {
         chrome.browserAction.setBadgeText({text: "Error"});
@@ -46,101 +43,59 @@ function getAlerts() {
     if (!(dbo_key === "Undefined")) {
         var dbo_xhr = new XMLHttpRequest();
         dbo_xhr.open('GET', getYQLAddress(dbo_key), true);
-        console.log("err");
         dbo_xhr.onload = function() {
-            console.log(dbo_xhr.responseText);
-            if(dbo_xhr.responseText.indexOf('New messages') != -1) {
-                dbo_unread = 1;
-            }
+            pms = dbo_xhr.responseText.split("New messages").length - 1;
         };
         dbo_xhr.onerror = function() {
             chrome.browserAction.setBadgeText({text: "Error"});
         };
         dbo_xhr.send();
     }
+    
+    total = parseInt(alerts) + parseInt(conversations) + pms;
 
-    if (unread > 0 || con_unread > 0 || dbo_unread > 0){
-        var total_unread = parseInt(unread)+parseInt(con_unread)+parseInt(dbo_unread);
-        chrome.browserAction.setBadgeText({text: '' + total_unread});
+    if(total != old_total) {
+        chrome.browserAction.setBadgeText({text: '' + total});
         chrome.browserAction.setBadgeBackgroundColor({color: "#FF0000"});
-        if (unread > 0 && window.display_alert == 0) {
-            notify();
+    
+        if(alerts > alerts_old) {
+            notify(alerts, alerts == 1 ? "alert" : "alerts", url + "account/alerts");
+            alerts_old = alerts;
         }
-        if (con_unread > 0 && window.display_con == 0) {
-            notify_con();
+        if(conversations > conversations_old) {
+            notify(conversations, conversations == 1 ? "conversation" : "conversations", url + "conversations");
+            conversations_old = conversations;
         }
-        if (dbo_unread > 0 && window.display_dbo == 0) {
-            notify_dbo();
+        if(pms > pms_old) {
+            notify(pms, "Dev PM" + (pms == 1 ? "" : "s"), dbo_url + "private-messages");
+            pms_old = pms;
         }
     }
 
-    else{
-        chrome.browserAction.setBadgeText({text: ''});
-        window.display_alert = 0;
-        window.display_con = 0;
-        window.display_dbo = 0;
-    }
-
-    setTimeout(getAlerts,localStorage["time_length"]);
+    setTimeout(getAlerts, localStorage["time_length"]);
 }
-function notify() {
+function notify(number, type, url) {
     var notification = webkitNotifications.createNotification(
         'img/48.png',
         'Attention:',
-        'You have a new Bukkit alert!'
+        'You have ' + number + ' unread Bukkit ' + type + '!'
     );
     notification.show();
     playSound();
     notification.onclick = function(tabs)  {
-        chrome.tabs.create({'url': url + "account/alerts"});
+        chrome.tabs.create({'url': url});
         chrome.browserAction.setBadgeText({text: ''});
         notification.cancel();
     }
-       setTimeout(function(){
-    notification.cancel();
-    },localStorage["auto_close"]);
-    window.display_alert = 1;
-}
-
-function notify_con() {
-    var con_notification = webkitNotifications.createNotification(
-        'img/48.png',
-        'Attention:',
-        'You have a new Bukkit message!'
-    );
-    con_notification.show();
-    con_notification.onclick = function(tabc)  {
-        chrome.tabs.create({'url': url + "/conversations"});
-        chrome.browserAction.setBadgeText({text: ''});
-        con_notification.cancel();
-    }
+    
     setTimeout(function(){
-    notification.cancel();
-    },localStorage["auto_close"]);
-    window.display_con = 1;
-}
-
-function notify_dbo() {
-    var con_notification = webkitNotifications.createNotification(
-        'img/48.png',
-        'Attention:',
-        'You have a new Bukkit Dev message!'
-    );
-    con_notification.show();
-    con_notification.onclick = function(tabc)  {
-        chrome.tabs.create({'url': dbo_url + "private-messages/"});
-        chrome.browserAction.setBadgeText({text: ''});
-        con_notification.cancel();
-    }
-    setTimeout(function(){
-    notification.cancel();
-    },localStorage["auto_close"]);
-    window.display_dbo = 1;
+        notification.cancel();
+    }, localStorage["auto_close"]);
 }
 
 function playSound(){
     var snd = new Audio('solemn.mp3');
     if(localStorage["sound_play"] == "true"){
-    snd.play(); 
+        snd.play(); 
     }
 }
