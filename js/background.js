@@ -63,7 +63,7 @@ function getAlerts() {
         var dbo_xhr = new XMLHttpRequest();
         dbo_xhr.open('GET', getYQLAddress(dbo_key), true);
         dbo_xhr.onload = function() {
-            var pms = dbo_xhr.responseText.split("New messages").length - 1;
+            var pms = (dbo_xhr.responseText.split("New messages").length - 1) / 2;
             console.log("Connected to Bukkit Dev. PMs: " + pms + ".");
             
             if(pms > pms_old) {
