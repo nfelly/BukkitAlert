@@ -8,9 +8,6 @@ function save_options() {
   var select_auto = document.getElementById("autoclose");
   var autoclose = select_auto.children[select_auto.selectedIndex].value;
   localStorage["auto_close"] = autoclose;
-  //dbo api key
-  var select_dbo_key = document.getElementById("dbo_key");
-  localStorage["dbo_key"] = select_dbo_key.value;
   //badge link
   var select_badge_link = document.getElementById("badge_link");
   localStorage["badge_link"] = select_badge_link.value;
